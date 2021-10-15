@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     public GameObject menu;
     public Text menuT;
     public Text jumpT;
+    public AudioSource jump1;
+    public AudioSource jump2;
     public float maxJump = 5;
     public float jumpNum;
     public float speed = 5;
@@ -27,12 +29,13 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))          //TAP TO JUMP
+        if (Input.GetKeyDown(KeyCode.Mouse0) & Time.timeScale != 0)          //TAP TO JUMP
         {
             rb.simulated = true;
             if (jumpNum > 0)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
+                if (!facingF) { jump1.Play(); } else { jump2.Play(); } // play audio q based on jump direction
                 facingF = !facingF;
                 jumpNum -= 1;
             }

@@ -12,6 +12,7 @@ public class Control : MonoBehaviour
     public GameObject OW;
     public Text heightT;
     public float height;
+    public float hThresh = 0;
     public bool started = false;
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,13 @@ public class Control : MonoBehaviour
             StartCoroutine(SummonOW());
         }
 
+        if (height > hThresh + 3) //summon based on height
+        {
+            Instantiate(Up, new Vector2(Random.Range(-2.0f, 2.0f), player.transform.position.y + Random.Range(5.5f, 7.0f)), Quaternion.identity);
+            Instantiate(OW, new Vector2(Random.Range(-2.0f, 2.0f), player.transform.position.y + 6), Quaternion.identity);  
+            hThresh = height;
+        }
+
 
 
         this.transform.position = new Vector3(0, player.transform.position.y, -10); // cam follows player vertically
@@ -44,7 +52,7 @@ public class Control : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(0.6f, 1.3f));
+            yield return new WaitForSeconds(Random.Range(0.8f, 1.5f));
             Instantiate(Up, new Vector2(Random.Range(-2.0f, 2.0f), player.transform.position.y + 6), Quaternion.identity);
         }
     }
@@ -52,7 +60,7 @@ public class Control : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(2, 5));
+            yield return new WaitForSeconds(Random.Range(4, 5));
             Instantiate(OW, new Vector2(Random.Range(-2.0f, 2.0f), player.transform.position.y + 6), Quaternion.identity);
         }
     }
