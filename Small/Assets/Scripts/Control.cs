@@ -13,6 +13,7 @@ public class Control : MonoBehaviour
     public Text heightT;
     public float height;
     public float hThresh = 0;
+    public float hThresh2 = 0;
     public bool started = false;
     // Start is called before the first frame update
     void Start()
@@ -30,11 +31,15 @@ public class Control : MonoBehaviour
             StartCoroutine(SummonOW());
         }
 
-        if (height > hThresh + 3) //summon based on height
+        if (height > hThresh + 3 + (height / 100)) //summon based on height
         {
             Instantiate(Up, new Vector2(Random.Range(-2.0f, 2.0f), player.transform.position.y + Random.Range(5.5f, 7.0f)), Quaternion.identity);
-            Instantiate(OW, new Vector2(Random.Range(-2.0f, 2.0f), player.transform.position.y + 6), Quaternion.identity);  
             hThresh = height;
+        }
+        if (height > hThresh2 + 3) //summon based on height
+        {
+            Instantiate(OW, new Vector2(Random.Range(-2.0f, 2.0f), player.transform.position.y + 6), Quaternion.identity);
+            hThresh2 = height;
         }
 
 

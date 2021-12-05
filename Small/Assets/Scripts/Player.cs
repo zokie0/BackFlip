@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public float jumpNum;
     public float speed = 5;
     public float jump = 10;
+    public float playerNum = 0;
     public bool facingF = false;
     public bool recharging = false;
     // Start is called before the first frame update
@@ -34,10 +35,27 @@ public class Player : MonoBehaviour
             rb.simulated = true;
             if (jumpNum > 0)
             {
-                rb.velocity = new Vector2(rb.velocity.x, jump);
-                if (!facingF) { jump1.Play(); } else { jump2.Play(); } // play audio q based on jump direction
-                facingF = !facingF;
-                jumpNum -= 1;
+                if (playerNum == 0)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, jump);
+                    if (!facingF) { jump1.Play(); } else { jump2.Play(); } // play audio q based on jump direction
+                    facingF = !facingF;
+                    jumpNum -= 1;
+                }
+                if (playerNum == 1 & Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition).y < 0)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, jump);
+                    if (!facingF) { jump1.Play(); } else { jump2.Play(); } 
+                    facingF = !facingF;
+                    jumpNum -= 1;
+                }
+                if (playerNum == 2 & Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition).y > 0)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, jump);
+                    if (!facingF) { jump1.Play(); } else { jump2.Play(); } 
+                    facingF = !facingF;
+                    jumpNum -= 1;
+                }
             }
         }
 
@@ -82,8 +100,19 @@ public class Player : MonoBehaviour
         if (coll.gameObject.tag == "Hurt")
         {
             menu.SetActive(true);
-            menu.transform.position = new Vector3(0, this.transform.position.y + 1.8f, 0);
-            menuT.text = "Score: \n \n" + Mathf.Round(gameController.GetComponent<Control>().height * 100);
+            if(playerNum == 0)
+            {
+                menu.transform.position = new Vector3(0, this.transform.position.y + 1.8f, 0);
+                menuT.text = "Score: \n \n" + Mathf.Round(gameController.GetComponent<Control>().height * 100);
+            }
+            if(playerNum == 1)
+            {
+                menuT.text = "Player 2 Wins!";
+            }
+            if (playerNum == 2)
+            {
+                menuT.text = "Player 1 Wins!";
+            }
             Time.timeScale = 0;
         }
     }
