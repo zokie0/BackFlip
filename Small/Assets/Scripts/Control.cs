@@ -12,7 +12,7 @@ public class Control : MonoBehaviour
     public GameObject OW;
     public Text heightT;
     public float height;
-    public float hThresh = 0;
+    public float hThresh = -3;
     public float hThresh2 = 0;
     public bool started = false;
     // Start is called before the first frame update
@@ -47,7 +47,11 @@ public class Control : MonoBehaviour
         this.transform.position = new Vector3(0, player.transform.position.y, -10); // cam follows player vertically
 
         if (player.transform.position.y > height) { height = player.transform.position.y; } //height logic
-        heightT.text = "" + Mathf.Round(height * 100); //text update
+
+        if(player.GetComponent<Rigidbody2D>().simulated == true)
+        {
+            heightT.text = "" + Mathf.Round(height * 100); //text update
+        } else { heightT.text = " "; }
 
         Floor.transform.position = new Vector2(0, height - 5.2f); //move floor
         destroyZone.transform.position = new Vector2(0, height - 15.0f); //move destroyZone

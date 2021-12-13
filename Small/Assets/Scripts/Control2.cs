@@ -10,7 +10,6 @@ public class Control2 : MonoBehaviour
     public GameObject destroyZone;
     public GameObject Up;
     public GameObject OW;
-    public Text heightT;
     public float height;
     public float hThresh = 0;
     public bool started = false;
@@ -52,7 +51,7 @@ public class Control2 : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(2.5f, 4.0f));
+            yield return new WaitForSeconds(Random.Range(2.0f, 3.0f));
             if (Random.value > 0.5f)//start low move up
             {
                 Instantiate(OW, new Vector2(Random.Range(-2.0f, 2.0f), -6), Quaternion.identity);

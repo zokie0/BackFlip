@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public Text jumpT;
     public AudioSource jump1;
     public AudioSource jump2;
+    public AudioSource destroy;
     public float maxJump = 5;
     public float jumpNum;
     public float speed = 5;
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
     public float playerNum = 0;
     public bool facingF = false;
     public bool recharging = false;
+    public bool desAnim = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -73,7 +75,18 @@ public class Player : MonoBehaviour
 
 
         //text
-        jumpT.text = "" + jumpNum;
+        if(!desAnim)
+        {
+            jumpT.text = "" + jumpNum;
+        } else { jumpT.text = " "; }
+    }
+
+    private void FixedUpdate()
+    {
+        if (desAnim & this.transform.localScale.x > 0)
+        {
+            this.transform.localScale -= new Vector3(0.0005f, 0.0005f, 0);
+        }
     }
 
     private IEnumerator jumpCharge()
@@ -102,18 +115,35 @@ public class Player : MonoBehaviour
             menu.SetActive(true);
             if(playerNum == 0)
             {
-                menu.transform.position = new Vector3(0, this.transform.position.y + 1.8f, 0);
-                menuT.text = "Score: \n \n" + Mathf.Round(gameController.GetComponent<Control>().height * 100);
+                menu.transform.position = new Vector3(0, this.transform.position.y + 1.9f, 0);
+                menuT.text = "Score \n \n" + Mathf.Round(gameController.GetComponent<Control>().height * 100);
             }
             if(playerNum == 1)
             {
                 menuT.text = "Player 2 Wins!";
+                Time.timeScale = 0;
             }
             if (playerNum == 2)
             {
                 menuT.text = "Player 1 Wins!";
+                Time.timeScale = 0;
             }
-            Time.timeScale = 0;
+            //jumpT.text = " ";
+            //Time.timeScale = 0;
+            StartCoroutine(destroyAnim());
         }
+    }
+
+    IEnumerator destroyAnim()
+    {
+        desAnim = true;
+        destroy.Play();
+        rb.simulated = false;
+        rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        jump1.volume = 0;
+        jump2.volume = 0;
+        yield return new WaitForSeconds(1.1f);
+        this.GetComponent<SpriteRenderer>().enabled = false;
+        Time.timeScale = 0;
     }
 }
